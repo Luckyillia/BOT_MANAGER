@@ -1,0 +1,30 @@
+{
+  "chats": {
+    "-4717822938": {
+      "chatTitle": "Помощник Чата",
+      "users": {
+        "677128727": {
+          "firstName": "Илюша",
+          "lastName": "",
+          "username": "Lucky_illia",
+          "messageCount": 9,
+          "customNick": "Polter_Sokirovskiy",
+          "status": "member"
+        }
+      }
+    },
+    "-1002347364439": {
+      "chatTitle": "Помощник Чата",
+      "users": {
+        "1087968824": {
+          "firstName": "Group",
+          "lastName": "",
+          "username": "GroupAnonymousBot",
+          "messageCount": 1,
+          "customNick": "",
+          "status": "member"
+        }
+      }
+    }
+  }
+}
