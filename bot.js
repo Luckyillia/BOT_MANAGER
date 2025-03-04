@@ -356,6 +356,11 @@ bot.command('help', (ctx) => {
     incrementUserMessage(chatId, userId);
 });
 
+bot.reaction("👍", (ctx) => {
+    // user added a 👍 reaction
+    console.log(ctx.update);
+});
+
 // Обработка событий chat_member
 bot.on('chat_member', async (ctx) => {
     const chatId = ctx.chat.id;
@@ -449,16 +454,58 @@ bot.on('left_chat_member', (ctx) => {
     ctx.reply(`👋 ${ctx.message.left_chat_member.first_name} покинул чат.`);
 });
 
+const userDislikeCounts = {}; // Объект для хранения количества дизлайков
+
+bot.on("message_reaction", async (ctx) => {
+    const update = ctx.update.message_reaction;
+    const chatId = update.chat.id;
+    const messageId = update.message_id;
+    const userId = update.user.id;
+    const addedReactions = update.new_reaction;
+    const removedReactions = update.old_reaction;
+
+    // Проверяем, поставили ли дизлайк (👎)
+    if (addedReactions.some(r => r.type === "emoji" && r.emoji === "👎")) {
+        if (!userDislikeCounts[messageId]) {
+            userDislikeCounts[messageId] = 0;
+        }
+
+        userDislikeCounts[messageId]++;
+        if (userDislikeCounts[messageId] >= 2) {
+            try {
+                const message = await ctx.telegram.getChatMessage(chatId, messageId);
+                const authorId = message.from.id;
+
+                await ctx.telegram.restrictChatMember(chatId, authorId, {
+                    until_date: Math.floor(Date.now() / 1000) + 3600, // 1 час мута
+                    can_send_messages: false
+                });
+
+                await ctx.telegram.sendMessage(chatId, `🚫 Пользователь @${message.from.username} получил мут за 10 дизлайков!`);
+                delete userDislikeCounts[messageId];
+            } catch (error) {
+                console.error("Ошибка при муте пользователя:", error);
+            }
+        }
+    }
+    if (removedReactions.some(r => r.type === "emoji" && r.emoji === "👎")) {
+        userDislikeCounts[messageId]--;
+        console.log(userDislikeCounts);
+    }
+});
+
+
+
 // Подсчет сообщений пользователя
 bot.on('message', (ctx) => {
     const chatId = ctx.chat.id;
     const userId = ctx.from.id;
-
+    console.log(ctx.message);
     addUserIfNotExists(chatId, ctx);
     incrementUserMessage(chatId, userId);
 });
 
 // Запуск бота
-bot.launch()
+bot.launch({allowedUpdates: [ 'message', 'message_reaction']})
   .then(() => log('Бот успешно запущен', 'start'))
   .catch((error) => log(`Ошибка при запуске бота: ${error.message}`, 'error'));

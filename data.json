@@ -16,6 +16,22 @@
     "-1002347364439": {
       "chatTitle": "Помощник Чата",
       "users": {
+        "677128727": {
+          "firstName": "Илюша",
+          "lastName": "",
+          "username": "Lucky_illia",
+          "messageCount": 15,
+          "customNick": "",
+          "status": "member"
+        },
+        "823658687": {
+          "firstName": "Bagdasaryan",
+          "lastName": "",
+          "username": "bagdasaryan_1",
+          "messageCount": 2,
+          "status": "member",
+          "reputation": 1
+        },
         "1087968824": {
           "firstName": "Group",
           "lastName": "",
@@ -23,6 +39,14 @@
           "messageCount": 1,
           "customNick": "",
           "status": "member"
+        },
+        "1197848280": {
+          "firstName": "︎ ︎ ᅠ",
+          "lastName": "",
+          "username": "droof1x",
+          "messageCount": 2,
+          "status": "member",
+          "reputation": null
         }
       }
     }
